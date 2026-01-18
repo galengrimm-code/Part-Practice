@@ -1,11 +1,11 @@
 {
-  "name": "Hymnal Voice Trainer",
-  "short_name": "Hymn Trainer",
+  "name": "Part Practice",
+  "short_name": "Part Practice",
   "description": "Practice hymn voice parts with real-time pitch detection",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#1a1a2e",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
   "orientation": "portrait-primary",
   "icons": [
     {
