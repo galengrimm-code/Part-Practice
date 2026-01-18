@@ -124,11 +124,11 @@ h2{color:#f4f4f5;font-size:18px;font-weight:500;margin-bottom:12px}
 .upload-area:active{border-color:#6366f1;background:#6366f111}
 .upload-area .icon{font-size:36px;margin-bottom:8px}
 .upload-area p{color:#71717a;font-size:14px;margin:0}
+.api-key-input{width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#f4f4f5;font-size:14px}
+.api-key-input:focus{outline:none;border-color:#6366f1}
 .upload-area input{display:none}
 .api-key-section{margin-top:20px;padding-top:20px;border-top:1px solid #27272a}
 .api-key-section label{display:block;font-size:13px;color:#a1a1aa;margin-bottom:8px}
-.api-key-input{width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#f4f4f5;font-size:14px}
-.api-key-input:focus{outline:none;border-color:#6366f1}
 .scan-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:16px}
 .scan-btn:disabled{opacity:.5;cursor:not-allowed}
 .scan-status{margin-top:16px;padding:12px;background:#27272a;border-radius:10px;font-size:14px;color:#a1a1aa}
@@ -217,7 +217,79 @@ footer{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #
       </div>
     </div>
     
-    <footer>Part Practice • Built for church musicians</footer>
+    <!-- Review/Edit Modal -->
+    <div id="review-modal" class="modal-overlay hidden">
+      <div class="modal" style="max-width:600px">
+        <h3>📝 Review Scanned Hymn</h3>
+        <p style="color:#71717a;font-size:13px;margin-bottom:16px">Check the detected notes and fix any errors before saving.</p>
+        
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Title</label>
+          <input type="text" id="review-title" class="api-key-input" style="width:100%">
+        </div>
+        
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Key</label>
+            <input type="text" id="review-key" class="api-key-input" style="width:100%">
+          </div>
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Tempo (BPM)</label>
+            <input type="number" id="review-tempo" class="api-key-input" style="width:100%">
+          </div>
+        </div>
+        
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Lyrics (one line per row)</label>
+          <textarea id="review-verse" class="api-key-input" style="width:100%;height:60px;resize:vertical"></textarea>
+        </div>
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:#f472b6;margin-bottom:6px">Soprano Notes (space-separated)</label>
+          <textarea id="review-soprano" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
+        </div>
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:#a78bfa;margin-bottom:6px">Alto Notes (space-separated)</label>
+          <textarea id="review-alto" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
+        </div>
+        
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:#38bdf8;margin-bottom:6px">Tenor Notes (space-separated)</label>
+          <textarea id="review-tenor" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
+        </div>
+        
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:#4ade80;margin-bottom:6px">Bass Notes (space-separated)</label>
+          <textarea id="review-bass" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
+        </div>
+        
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
+            <div style="font-size:11px;color:#71717a;margin-bottom:4px">Soprano</div>
+            <div id="count-soprano" style="font-size:18px;color:#f472b6">0</div>
+          </div>
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
+            <div style="font-size:11px;color:#71717a;margin-bottom:4px">Alto</div>
+            <div id="count-alto" style="font-size:18px;color:#a78bfa">0</div>
+          </div>
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
+            <div style="font-size:11px;color:#71717a;margin-bottom:4px">Tenor</div>
+            <div id="count-tenor" style="font-size:18px;color:#38bdf8">0</div>
+          </div>
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
+            <div style="font-size:11px;color:#71717a;margin-bottom:4px">Bass</div>
+            <div id="count-bass" style="font-size:18px;color:#4ade80">0</div>
+          </div>
+        </div>
+        <p id="count-warning" class="hidden" style="color:#fbbf24;font-size:12px;margin-bottom:12px;text-align:center">⚠️ Note counts don't match - parts should have equal notes</p>
+        
+        <button class="scan-btn" onclick="saveReviewedHymn()">✓ Save Hymn</button>
+        <button style="width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#a1a1aa;margin-top:12px;cursor:pointer" onclick="closeReviewModal()">Cancel</button>
+      </div>
+    </div>
+    
+    <footer>Part Practice • Built for aspiring singers</footer>
   </div>
 
 <script>
@@ -356,6 +428,8 @@ if(file.type==='application/pdf'){
 }
 }
 
+let pendingHymnData = null;
+
 async function scanHymn(){
 if(!selectedImage)return;
 
@@ -391,23 +465,83 @@ try{
     throw new Error('Could not parse hymn data from response');
   }
   
-  // Generate unique ID
-  const id='custom-'+Date.now();
-  hymnData.id=id;
+  // Store pending data and show review modal
+  pendingHymnData = hymnData;
+  closeScanModal();
+  showReviewModal(hymnData);
   
-  // Save to localStorage
-  CUSTOM_HYMNS[id]=hymnData;
-  localStorage.setItem('customHymns',JSON.stringify(CUSTOM_HYMNS));
-  
-  status.textContent='✓ Hymn added successfully!';
-  status.style.color='#4ade80';
-  
-  setTimeout(()=>{closeScanModal();renderHymnList()},1500);
 }catch(e){
   status.textContent='Error: '+e.message;
   status.style.color='#f87171';
   document.getElementById('scan-btn').disabled=false;
 }
+}
+
+function showReviewModal(data){
+  document.getElementById('review-modal').classList.remove('hidden');
+  document.getElementById('review-title').value = data.title || '';
+  document.getElementById('review-key').value = data.key || '';
+  document.getElementById('review-tempo').value = data.tempo || 72;
+  document.getElementById('review-verse').value = (data.verse || []).join('\n');
+  document.getElementById('review-soprano').value = (data.parts?.soprano || []).join(' ');
+  document.getElementById('review-alto').value = (data.parts?.alto || []).join(' ');
+  document.getElementById('review-tenor').value = (data.parts?.tenor || []).join(' ');
+  document.getElementById('review-bass').value = (data.parts?.bass || []).join(' ');
+  updateNoteCounts();
+}
+
+function closeReviewModal(){
+  document.getElementById('review-modal').classList.add('hidden');
+  pendingHymnData = null;
+}
+
+function updateNoteCounts(){
+  const soprano = document.getElementById('review-soprano').value.trim().split(/\s+/).filter(n=>n);
+  const alto = document.getElementById('review-alto').value.trim().split(/\s+/).filter(n=>n);
+  const tenor = document.getElementById('review-tenor').value.trim().split(/\s+/).filter(n=>n);
+  const bass = document.getElementById('review-bass').value.trim().split(/\s+/).filter(n=>n);
+  
+  document.getElementById('count-soprano').textContent = soprano.length;
+  document.getElementById('count-alto').textContent = alto.length;
+  document.getElementById('count-tenor').textContent = tenor.length;
+  document.getElementById('count-bass').textContent = bass.length;
+  
+  const allSame = soprano.length === alto.length && alto.length === tenor.length && tenor.length === bass.length;
+  document.getElementById('count-warning').classList.toggle('hidden', allSame || soprano.length === 0);
+}
+
+// Add event listeners for note counting
+document.addEventListener('DOMContentLoaded', () => {
+  ['review-soprano','review-alto','review-tenor','review-bass'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', updateNoteCounts);
+  });
+});
+
+function saveReviewedHymn(){
+  const title = document.getElementById('review-title').value.trim();
+  if(!title){alert('Please enter a title');return}
+  
+  const hymnData = {
+    id: 'custom-' + Date.now(),
+    title: title,
+    author: 'Scanned',
+    key: document.getElementById('review-key').value.trim() || 'Unknown',
+    tempo: parseInt(document.getElementById('review-tempo').value) || 72,
+    verse: document.getElementById('review-verse').value.trim().split('\n').filter(l=>l),
+    parts: {
+      soprano: document.getElementById('review-soprano').value.trim().split(/\s+/).filter(n=>n),
+      alto: document.getElementById('review-alto').value.trim().split(/\s+/).filter(n=>n),
+      tenor: document.getElementById('review-tenor').value.trim().split(/\s+/).filter(n=>n),
+      bass: document.getElementById('review-bass').value.trim().split(/\s+/).filter(n=>n)
+    }
+  };
+  
+  // Save to localStorage
+  CUSTOM_HYMNS[hymnData.id] = hymnData;
+  localStorage.setItem('customHymns', JSON.stringify(CUSTOM_HYMNS));
+  
+  closeReviewModal();
+  renderHymnList();
 }
 
 function renderHymnList(){const l=document.getElementById('hymn-list');l.innerHTML='';
