@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Part Practice">
-<meta name="theme-color" content="#0a0a0f">
-<meta name="description" content="Practice hymn voice parts with real-time pitch detection">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
-<title>Part Practice</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Part Practice">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="description" content="Practice hymn voice parts with real-time pitch detection">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+  <script src="https://cdn.jsdelivr.net/npm/vexflow@4.2.3/build/cjs/vexflow.js"></script>
+  <title>Part Practice</title>
+  <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#0a0a0f;color:#e4e4e7;min-height:100vh;padding:16px;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 .container{max-width:900px;margin:0 auto}
@@ -41,13 +41,13 @@ h2{color:#f4f4f5;font-size:18px;font-weight:500;margin-bottom:12px}
 .voice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 @media(min-width:500px){.voice-grid{grid-template-columns:repeat(4,1fr)}}
 .voice-card{background:#27272a;border:2px solid transparent;border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s}
-.voice-card.selected{border-color:var(–voice-color);background:color-mix(in srgb,var(–voice-color) 15%,#18181b)}
+.voice-card.selected{border-color:var(--voice-color);background:color-mix(in srgb,var(--voice-color) 15%,#18181b)}
 .voice-card.muted{opacity:.35}
 .voice-card .name{text-transform:capitalize;font-size:15px;margin-bottom:2px;font-weight:500;color:#f4f4f5}
 .voice-card .range{font-size:10px;color:#71717a}
 .voice-controls{display:flex;gap:6px;margin-top:8px;justify-content:center}
 .voice-controls button{padding:6px 10px;font-size:11px;border-radius:6px;border:1px solid #3f3f46;background:#27272a;color:#a1a1aa;cursor:pointer;min-width:32px;font-weight:600}
-.voice-controls button.active{background:var(–voice-color);color:#0a0a0f;border-color:var(–voice-color)}
+.voice-controls button.active{background:var(--voice-color);color:#0a0a0f;border-color:var(--voice-color)}
 
 .instrument-row{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .instrument-row::-webkit-scrollbar{display:none}
@@ -66,15 +66,23 @@ h2{color:#f4f4f5;font-size:18px;font-weight:500;margin-bottom:12px}
 .practice-toggle{display:flex;align-items:center;gap:8px;cursor:pointer}
 .toggle-switch{width:48px;height:28px;background:#3f3f46;border-radius:14px;position:relative;transition:background .2s}
 .toggle-switch.active{background:#6366f1}
-.toggle-switch::after{content:’’;position:absolute;width:24px;height:24px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .2s}
+.toggle-switch::after{content:'';position:absolute;width:24px;height:24px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .2s}
 .toggle-switch.active::after{transform:translateX(20px)}
 .practice-range{display:flex;align-items:center;gap:8px;flex:1}
 .range-input{width:50px;padding:8px;background:#27272a;border:1px solid #3f3f46;border-radius:8px;color:#f4f4f5;font-size:14px;text-align:center}
 
+/* Sheet Music Display */
+.sheet-music-container{background:#1a1a1f;border-radius:12px;padding:12px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#sheet-music{min-height:200px}
+#sheet-music svg{display:block;margin:0 auto}
+.sheet-toggle{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sheet-toggle button{padding:8px 14px;background:#27272a;border:1px solid #3f3f46;border-radius:8px;color:#a1a1aa;cursor:pointer;font-size:13px}
+.sheet-toggle button.active{background:#6366f1;border-color:#6366f1;color:#fff}
+
 .progress-dots{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px;justify-content:center}
 .progress-dot{width:20px;height:8px;border-radius:4px;background:#27272a;transition:all .15s;cursor:pointer}
 .progress-dot.in-range{background:#3f3f46}
-.progress-dot.active{background:var(–voice-color,#6366f1);box-shadow:0 0 12px var(–voice-color,#6366f1)}
+.progress-dot.active{background:var(--voice-color,#6366f1);box-shadow:0 0 12px var(--voice-color,#6366f1)}
 .progress-dot.loop-marker{box-shadow:0 0 0 2px #6366f1}
 @media(min-width:500px){.progress-dot{width:28px;height:8px}}
 
@@ -116,20 +124,16 @@ h2{color:#f4f4f5;font-size:18px;font-weight:500;margin-bottom:12px}
 .headphone-warning{background:#eab30822;border:1px solid #eab30844;border-radius:12px;padding:12px;color:#fde047;font-size:13px;margin-bottom:12px}
 .headphone-warning button{margin-top:10px;padding:10px 16px;background:#eab308;border:none;border-radius:8px;color:#0a0a0f;cursor:pointer;font-size:13px;font-weight:600}
 
-/* Scan Modal */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;z-index:1000}
 .modal{background:#18181b;border:1px solid #27272a;border-radius:20px;padding:24px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
 .modal h3{color:#f4f4f5;font-size:20px;margin-bottom:16px;font-weight:600}
-.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:#71717a;font-size:24px;cursor:pointer}
 .upload-area{border:2px dashed #3f3f46;border-radius:16px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s}
 .upload-area:active{border-color:#6366f1;background:#6366f111}
 .upload-area .icon{font-size:36px;margin-bottom:8px}
 .upload-area p{color:#71717a;font-size:14px;margin:0}
+.upload-area input{display:none}
 .api-key-input{width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#f4f4f5;font-size:14px}
 .api-key-input:focus{outline:none;border-color:#6366f1}
-.upload-area input{display:none}
-.api-key-section{margin-top:20px;padding-top:20px;border-top:1px solid #27272a}
-.api-key-section label{display:block;font-size:13px;color:#a1a1aa;margin-bottom:8px}
 .scan-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#4f46e5);border:none;border-radius:12px;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:16px}
 .scan-btn:disabled{opacity:.5;cursor:not-allowed}
 .scan-status{margin-top:16px;padding:12px;background:#27272a;border-radius:10px;font-size:14px;color:#a1a1aa}
@@ -140,162 +144,143 @@ footer{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #
 @media screen and (max-width:768px){select,input,textarea,button{font-size:16px}}
 @supports(padding:max(0px)){body{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));padding-bottom:max(16px,env(safe-area-inset-bottom))}}
 @media(display-mode:standalone){body{padding-top:env(safe-area-inset-top,16px)}}
-</style>
-
+  </style>
 </head>
 <body>
-<div class="container">
-<header><h1>Part Practice</h1><p>Practice your voice part with real-time pitch feedback</p></header>
-
-```
-<div id="hymn-select">
-<h2>Select a Hymn</h2>
-<div class="hymn-list" id="hymn-list"></div>
-</div>
-
-<div id="practice" class="hidden">
-<button class="back-btn" onclick="goBack()">← Back</button>
-<h2 id="hymn-title"></h2>
-<p id="hymn-meta" style="color:#71717a;margin-bottom:20px"></p>
-<div class="section" style="text-align:center"><div id="verse-text"></div></div>
-<div class="section"><div class="section-label">Voice Parts</div><div class="voice-grid" id="voice-grid"></div></div>
-<div class="section"><div class="section-label">Instrument</div><div class="instrument-row" id="instrument-row"></div></div>
-<div class="section">
-<div class="section-label">Tempo & Key</div>
-<div class="controls-row">
-<div class="control-group"><label>Tempo</label><div class="control-row"><button class="control-btn" onclick="adjustTempo(-5)">−</button><div class="control-value" id="tempo-display">72</div><button class="control-btn" onclick="adjustTempo(5)">+</button></div></div>
-<div class="control-group"><label>Key</label><div class="control-row"><button class="control-btn" onclick="adjustKey(-1)">♭</button><div class="control-value" id="key-display">0</div><button class="control-btn" onclick="adjustKey(1)">♯</button></div></div>
-</div>
-<div class="practice-mode">
-<div class="practice-toggle" onclick="toggleLoopMode()"><div class="toggle-switch" id="loop-toggle"></div><span style="font-size:13px;color:#a1a1aa">Loop</span></div>
-<div class="practice-range" id="loop-range-controls" style="display:none"><span style="font-size:12px;color:#71717a">Notes:</span><input type="number" class="range-input" id="loop-start" value="1" min="1" onchange="updateLoopRange()"><span style="color:#71717a">-</span><input type="number" class="range-input" id="loop-end" value="4" min="1" onchange="updateLoopRange()"></div>
-</div>
-</div>
-<div class="section">
-<div class="section-label">Playback</div>
-<div class="progress-dots" id="progress-dots"></div>
-<div class="play-area">
-<button class="play-btn" id="play-btn" onclick="togglePlay()">▶</button>
-<div class="loop-indicator" id="loop-indicator" style="display:none">🔁 <span id="loop-range-text">1-4</span></div>
-<div class="current-note" id="current-note-display" style="display:none"><div class="label">Your Part</div><div class="note" id="current-note">—</div></div>
-</div>
-</div>
-<div class="section">
-<div class="pitch-header"><div class="section-label" style="margin:0">Pitch Monitor</div><button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤 <span id="mic-btn-text">Start</span></button></div>
-<div id="mic-error" class="error-msg hidden"></div>
-<div id="headphone-warning" class="headphone-warning hidden">🎧 Use headphones or mute playback for accurate pitch detection<div><button onclick="togglePlaybackMute()" id="mute-playback-btn">🔇 Mute Playback</button></div></div>
-<div id="pitch-ui" class="hidden">
-<div class="pitch-display"><div class="pitch-box neutral" id="target-box"><div class="label">Target</div><div class="value" id="target-note">—</div><div class="freq" id="target-freq"></div></div><div class="pitch-box neutral" id="detected-box"><div class="label">You</div><div class="value" id="detected-note">—</div><div class="freq" id="detected-freq"></div></div></div>
-<div class="feedback-bar" id="feedback-bar">Sing a note...</div>
-<div class="cents-display" id="cents-display"></div>
-<div class="listening-indicator"><div class="pulse-dot"></div>Listening...</div>
-</div>
-<p id="mic-prompt" style="text-align:center;color:#71717a">Tap Start to enable pitch detection</p>
-</div>
-</div>
-
-<!-- Scan Modal -->
-<div id="scan-modal" class="modal-overlay hidden">
-<div class="modal">
-<h3>📷 Scan Hymn</h3>
-<div style="display:flex;gap:12px;margin-bottom:12px">
-<div class="upload-area" style="flex:1" onclick="document.getElementById('image-input').click()">
-<div class="icon">📁</div>
-<p>Upload File</p>
-<p style="font-size:11px;color:#52525b;margin-top:4px">JPG, PNG, PDF</p>
-<input type="file" id="image-input" accept="image/*,.pdf,application/pdf" onchange="handleFileSelect(event)">
-</div>
-<div class="upload-area" style="flex:1" onclick="document.getElementById('camera-input').click()">
-<div class="icon">📷</div>
-<p>Take Photo</p>
-<p style="font-size:11px;color:#52525b;margin-top:4px">Use camera</p>
-<input type="file" id="camera-input" accept="image/*" capture="environment" onchange="handleFileSelect(event)">
-</div>
-</div>
-<img id="preview-image" class="preview-image hidden">
-<div id="pdf-notice" class="hidden" style="padding:12px;background:#27272a;border-radius:10px;margin-top:12px;font-size:13px;color:#a1a1aa"></div>
-<button class="scan-btn" id="scan-btn" onclick="scanHymn()" disabled>Analyze Sheet Music</button>
-<div id="scan-status" class="scan-status hidden"></div>
-<button style="width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#a1a1aa;margin-top:12px;cursor:pointer" onclick="closeScanModal()">Cancel</button>
-</div>
-</div>
-
-<!-- Review/Edit Modal -->
-<div id="review-modal" class="modal-overlay hidden">
-<div class="modal" style="max-width:600px">
-<h3>📝 Review Scanned Hymn</h3>
-<p style="color:#71717a;font-size:13px;margin-bottom:16px">Check the detected notes and fix any errors before saving.</p>
-
-<div style="margin-bottom:16px">
-<label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Title</label>
-<input type="text" id="review-title" class="api-key-input" style="width:100%">
-</div>
-
-<div style="display:flex;gap:12px;margin-bottom:16px">
-<div style="flex:1">
-<label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Key</label>
-<input type="text" id="review-key" class="api-key-input" style="width:100%">
-</div>
-<div style="flex:1">
-<label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Tempo (BPM)</label>
-<input type="number" id="review-tempo" class="api-key-input" style="width:100%">
-</div>
-</div>
-
-<div style="margin-bottom:16px">
-<label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Lyrics (one line per row)</label>
-<textarea id="review-verse" class="api-key-input" style="width:100%;height:60px;resize:vertical"></textarea>
-</div>
-
-<div style="margin-bottom:12px">
-<label style="display:block;font-size:12px;color:#f472b6;margin-bottom:6px">Soprano Notes (space-separated)</label>
-<textarea id="review-soprano" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
-</div>
-
-<div style="margin-bottom:12px">
-<label style="display:block;font-size:12px;color:#a78bfa;margin-bottom:6px">Alto Notes (space-separated)</label>
-<textarea id="review-alto" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
-</div>
-
-<div style="margin-bottom:12px">
-<label style="display:block;font-size:12px;color:#38bdf8;margin-bottom:6px">Tenor Notes (space-separated)</label>
-<textarea id="review-tenor" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
-</div>
-
-<div style="margin-bottom:16px">
-<label style="display:block;font-size:12px;color:#4ade80;margin-bottom:6px">Bass Notes (space-separated)</label>
-<textarea id="review-bass" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:13px"></textarea>
-</div>
-
-<div style="display:flex;gap:12px;margin-bottom:12px">
-<div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
-<div style="font-size:11px;color:#71717a;margin-bottom:4px">Soprano</div>
-<div id="count-soprano" style="font-size:18px;color:#f472b6">0</div>
-</div>
-<div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
-<div style="font-size:11px;color:#71717a;margin-bottom:4px">Alto</div>
-<div id="count-alto" style="font-size:18px;color:#a78bfa">0</div>
-</div>
-<div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
-<div style="font-size:11px;color:#71717a;margin-bottom:4px">Tenor</div>
-<div id="count-tenor" style="font-size:18px;color:#38bdf8">0</div>
-</div>
-<div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center">
-<div style="font-size:11px;color:#71717a;margin-bottom:4px">Bass</div>
-<div id="count-bass" style="font-size:18px;color:#4ade80">0</div>
-</div>
-</div>
-<p id="count-warning" class="hidden" style="color:#fbbf24;font-size:12px;margin-bottom:12px;text-align:center">⚠️ Note counts don't match - parts should have equal notes</p>
-
-<button class="scan-btn" onclick="saveReviewedHymn()">✓ Save Hymn</button>
-<button style="width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#a1a1aa;margin-top:12px;cursor:pointer" onclick="closeReviewModal()">Cancel</button>
-</div>
-</div>
-
-<footer>Part Practice • Built for aspiring singers</footer>
-```
-
-</div>
+  <div class="container">
+    <header><h1>Part Practice</h1><p>Practice your voice part with real-time pitch feedback</p></header>
+    
+    <div id="hymn-select">
+      <h2>Select a Hymn</h2>
+      <div class="hymn-list" id="hymn-list"></div>
+    </div>
+    
+    <div id="practice" class="hidden">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <h2 id="hymn-title"></h2>
+      <p id="hymn-meta" style="color:#71717a;margin-bottom:20px"></p>
+      
+      <!-- Sheet Music Display -->
+      <div class="section" id="sheet-section">
+        <div class="section-label">Sheet Music</div>
+        <div class="sheet-music-container">
+          <div id="sheet-music"></div>
+        </div>
+        <div style="text-align:center;color:#71717a;font-size:12px;margin-top:8px">
+          <span id="note-counter">Note 0 / 0</span>
+        </div>
+      </div>
+      
+      <div class="section" style="text-align:center"><div id="verse-text"></div></div>
+      <div class="section"><div class="section-label">Voice Parts</div><div class="voice-grid" id="voice-grid"></div></div>
+      <div class="section"><div class="section-label">Instrument</div><div class="instrument-row" id="instrument-row"></div></div>
+      <div class="section">
+        <div class="section-label">Tempo & Key</div>
+        <div class="controls-row">
+          <div class="control-group"><label>Tempo</label><div class="control-row"><button class="control-btn" onclick="adjustTempo(-5)">−</button><div class="control-value" id="tempo-display">72</div><button class="control-btn" onclick="adjustTempo(5)">+</button></div></div>
+          <div class="control-group"><label>Key</label><div class="control-row"><button class="control-btn" onclick="adjustKey(-1)">♭</button><div class="control-value" id="key-display">0</div><button class="control-btn" onclick="adjustKey(1)">♯</button></div></div>
+        </div>
+        <div class="practice-mode">
+          <div class="practice-toggle" onclick="toggleLoopMode()"><div class="toggle-switch" id="loop-toggle"></div><span style="font-size:13px;color:#a1a1aa">Loop</span></div>
+          <div class="practice-range" id="loop-range-controls" style="display:none"><span style="font-size:12px;color:#71717a">Notes:</span><input type="number" class="range-input" id="loop-start" value="1" min="1" onchange="updateLoopRange()"><span style="color:#71717a">-</span><input type="number" class="range-input" id="loop-end" value="4" min="1" onchange="updateLoopRange()"></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-label">Playback</div>
+        <div class="progress-dots" id="progress-dots"></div>
+        <div class="play-area">
+          <button class="play-btn" id="play-btn" onclick="togglePlay()">▶</button>
+          <div class="loop-indicator" id="loop-indicator" style="display:none">🔁 <span id="loop-range-text">1-4</span></div>
+          <div class="current-note" id="current-note-display" style="display:none"><div class="label">Your Part</div><div class="note" id="current-note">—</div></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="pitch-header"><div class="section-label" style="margin:0">Pitch Monitor</div><button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤 <span id="mic-btn-text">Start</span></button></div>
+        <div id="mic-error" class="error-msg hidden"></div>
+        <div id="headphone-warning" class="headphone-warning hidden">🎧 Use headphones or mute playback<div><button onclick="togglePlaybackMute()" id="mute-playback-btn">🔇 Mute Playback</button></div></div>
+        <div id="pitch-ui" class="hidden">
+          <div class="pitch-display"><div class="pitch-box neutral" id="target-box"><div class="label">Target</div><div class="value" id="target-note">—</div><div class="freq" id="target-freq"></div></div><div class="pitch-box neutral" id="detected-box"><div class="label">You</div><div class="value" id="detected-note">—</div><div class="freq" id="detected-freq"></div></div></div>
+          <div class="feedback-bar" id="feedback-bar">Sing a note...</div>
+          <div class="cents-display" id="cents-display"></div>
+          <div class="listening-indicator"><div class="pulse-dot"></div>Listening...</div>
+        </div>
+        <p id="mic-prompt" style="text-align:center;color:#71717a">Tap Start to enable pitch detection</p>
+      </div>
+    </div>
+    
+    <!-- Scan Modal -->
+    <div id="scan-modal" class="modal-overlay hidden">
+      <div class="modal">
+        <h3>📷 Scan Hymn</h3>
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div class="upload-area" style="flex:1" onclick="document.getElementById('image-input').click()">
+            <div class="icon">📁</div>
+            <p>Upload File</p>
+            <p style="font-size:11px;color:#52525b;margin-top:4px">JPG, PNG, PDF</p>
+            <input type="file" id="image-input" accept="image/*,.pdf,application/pdf" onchange="handleFileSelect(event)">
+          </div>
+          <div class="upload-area" style="flex:1" onclick="document.getElementById('camera-input').click()">
+            <div class="icon">📷</div>
+            <p>Take Photo</p>
+            <p style="font-size:11px;color:#52525b;margin-top:4px">Use camera</p>
+            <input type="file" id="camera-input" accept="image/*" capture="environment" onchange="handleFileSelect(event)">
+          </div>
+        </div>
+        <img id="preview-image" class="preview-image hidden">
+        <div id="pdf-notice" class="hidden" style="padding:12px;background:#27272a;border-radius:10px;margin-top:12px;font-size:13px;color:#a1a1aa"></div>
+        <button class="scan-btn" id="scan-btn" onclick="scanHymn()" disabled>Analyze Sheet Music</button>
+        <div id="scan-status" class="scan-status hidden"></div>
+        <button style="width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#a1a1aa;margin-top:12px;cursor:pointer" onclick="closeScanModal()">Cancel</button>
+      </div>
+    </div>
+    
+    <!-- Review Modal -->
+    <div id="review-modal" class="modal-overlay hidden">
+      <div class="modal" style="max-width:600px">
+        <h3>📝 Review Scanned Hymn</h3>
+        <p style="color:#71717a;font-size:13px;margin-bottom:16px">Check the detected notes and fix any errors before saving.</p>
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Title</label>
+          <input type="text" id="review-title" class="api-key-input" style="width:100%">
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:16px">
+          <div style="flex:1"><label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Key</label><input type="text" id="review-key" class="api-key-input" style="width:100%"></div>
+          <div style="flex:1"><label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Tempo</label><input type="number" id="review-tempo" class="api-key-input" style="width:100%"></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:#71717a;margin-bottom:6px">Lyrics</label>
+          <textarea id="review-verse" class="api-key-input" style="width:100%;height:60px;resize:vertical"></textarea>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:#f472b6;margin-bottom:6px">Soprano</label>
+          <textarea id="review-soprano" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:12px"></textarea>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:#a78bfa;margin-bottom:6px">Alto</label>
+          <textarea id="review-alto" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:12px"></textarea>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;color:#38bdf8;margin-bottom:6px">Tenor</label>
+          <textarea id="review-tenor" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:12px"></textarea>
+        </div>
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;color:#4ade80;margin-bottom:6px">Bass</label>
+          <textarea id="review-bass" class="api-key-input" style="width:100%;height:50px;resize:vertical;font-family:monospace;font-size:12px"></textarea>
+        </div>
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center"><div style="font-size:11px;color:#71717a">S</div><div id="count-soprano" style="font-size:18px;color:#f472b6">0</div></div>
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center"><div style="font-size:11px;color:#71717a">A</div><div id="count-alto" style="font-size:18px;color:#a78bfa">0</div></div>
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center"><div style="font-size:11px;color:#71717a">T</div><div id="count-tenor" style="font-size:18px;color:#38bdf8">0</div></div>
+          <div style="flex:1;padding:12px;background:#27272a;border-radius:8px;text-align:center"><div style="font-size:11px;color:#71717a">B</div><div id="count-bass" style="font-size:18px;color:#4ade80">0</div></div>
+        </div>
+        <p id="count-warning" class="hidden" style="color:#fbbf24;font-size:12px;margin-bottom:12px;text-align:center">⚠️ Note counts don't match</p>
+        <button class="scan-btn" onclick="saveReviewedHymn()">✓ Save Hymn</button>
+        <button style="width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#a1a1aa;margin-top:12px;cursor:pointer" onclick="closeReviewModal()">Cancel</button>
+      </div>
+    </div>
+    
+    <footer>Part Practice • Built for aspiring singers</footer>
+  </div>
 
 <script>
 const HYMNS={
@@ -323,20 +308,80 @@ let currentHymn=null,selectedVoice=null,selectedInstrument='piano',voiceStates={
 let isPlaying=false,noteIndex=0,currentNote=null,targetNote=null,playInterval=null,audioCtx=null;
 let tempoOffset=0,keyOffset=0,loopMode=false,loopStart=0,loopEnd=3;
 let isListening=false,micStream=null,micCtx=null,analyser=null,animFrame=null,playbackMuted=false;
-
-// Smoothing for pitch detection
-let pitchHistory = [];
-const PITCH_HISTORY_SIZE = 5;
-const TARGET_DELAY = 400; // ms delay for target note (reaction time)
+let pitchHistory=[],sheetRenderer=null;
+const PITCH_HISTORY_SIZE=5,TARGET_DELAY=400;
 
 const noteToFreq=(n,t=0)=>{const m={'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11};const p=n.match(/^([A-G]#?b?)(\d)$/);if(!p)return 440;return 440*Math.pow(2,((m[p[1]]+(parseInt(p[2])+1)*12+t)-69)/12)};
 const transposeNote=(n,s)=>{if(s===0)return n;const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];const m={'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11};const p=n.match(/^([A-G]#?b?)(\d)$/);if(!p)return n;const t=m[p[1]]+parseInt(p[2])*12+s;return names[((t%12)+12)%12]+Math.floor(t/12)};
 const formatNote=n=>n?n.replace('#','♯').replace('b','♭'):'—';
 
-function playNote(n,d,v=.25){if(playbackMuted)return;
-if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)()}
-if(audioCtx.state==='suspended'){audioCtx.resume()}
-const i=INSTRUMENTS[selectedInstrument],o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=i.type;o.frequency.value=noteToFreq(n,keyOffset);const t=audioCtx.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+i.attack);g.gain.exponentialRampToValueAtTime(.01,t+d);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+d)}
+// VexFlow note conversion
+function noteToVex(note){
+  const match=note.match(/^([A-G])([#b]?)(\d)$/);
+  if(!match)return{key:'c/4',accidental:null};
+  const[,letter,acc,oct]=match;
+  const vexAcc=acc==='#'?'#':acc==='b'?'b':null;
+  return{key:`${letter.toLowerCase()}/${oct}`,accidental:vexAcc};
+}
+
+// Render sheet music with VexFlow
+function renderSheetMusic(highlightIndex=-1){
+  if(!currentHymn||!selectedVoice)return;
+  
+  const container=document.getElementById('sheet-music');
+  container.innerHTML='';
+  
+  const notes=currentHymn.parts[selectedVoice];
+  const notesPerLine=8;
+  const totalLines=Math.ceil(notes.length/notesPerLine);
+  
+  const VF=Vex.Flow;
+  const width=Math.min(container.parentElement.clientWidth-24,800);
+  const lineHeight=120;
+  
+  const renderer=new VF.Renderer(container,VF.Renderer.Backends.SVG);
+  renderer.resize(width,totalLines*lineHeight+20);
+  const context=renderer.getContext();
+  context.setFillStyle('#e4e4e7');
+  context.setStrokeStyle('#e4e4e7');
+  
+  const voiceColor=VOICES[selectedVoice].color;
+  
+  for(let line=0;line<totalLines;line++){
+    const startIdx=line*notesPerLine;
+    const lineNotes=notes.slice(startIdx,startIdx+notesPerLine);
+    if(lineNotes.length===0)continue;
+    
+    const stave=new VF.Stave(10,line*lineHeight+10,width-20);
+    if(line===0)stave.addClef(selectedVoice==='bass'||selectedVoice==='tenor'?'bass':'treble');
+    stave.setContext(context).draw();
+    
+    const vexNotes=lineNotes.map((n,i)=>{
+      const globalIdx=startIdx+i;
+      const vn=noteToVex(n);
+      const note=new VF.StaveNote({keys:[vn.key],duration:'q',clef:selectedVoice==='bass'||selectedVoice==='tenor'?'bass':'treble'});
+      if(vn.accidental)note.addModifier(new VF.Accidental(vn.accidental));
+      
+      // Highlight current note
+      if(globalIdx===highlightIndex){
+        note.setStyle({fillStyle:voiceColor,strokeStyle:voiceColor});
+      }else{
+        note.setStyle({fillStyle:'#71717a',strokeStyle:'#71717a'});
+      }
+      return note;
+    });
+    
+    const voice=new VF.Voice({num_beats:lineNotes.length,beat_value:4}).setStrict(false);
+    voice.addTickables(vexNotes);
+    new VF.Formatter().joinVoices([voice]).format([voice],width-60);
+    voice.draw(context,stave);
+  }
+  
+  // Update counter
+  document.getElementById('note-counter').textContent=`Note ${highlightIndex>=0?highlightIndex+1:0} / ${notes.length}`;
+}
+
+function playNote(n,d,v=.25){if(playbackMuted)return;if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)()}if(audioCtx.state==='suspended'){audioCtx.resume()}const i=INSTRUMENTS[selectedInstrument],o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=i.type;o.frequency.value=noteToFreq(n,keyOffset);const t=audioCtx.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+i.attack);g.gain.exponentialRampToValueAtTime(.01,t+d);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+d)}
 
 function initAudio(){if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)()}if(audioCtx.state==='suspended'){audioCtx.resume()}}
 
@@ -344,11 +389,9 @@ function togglePlay(){initAudio();isPlaying?stopPlaying():startPlaying()}
 function startPlaying(){if(!currentHymn)return;stopPlaying();isPlaying=true;noteIndex=loopMode?loopStart:0;document.getElementById('play-btn').textContent='⏹';document.getElementById('current-note-display').style.display=selectedVoice?'block':'none';const tempo=currentHymn.tempo+tempoOffset,beat=60/tempo;
 function next(){const max=Math.max(...Object.values(currentHymn.parts).map(p=>p.length)),end=loopMode?Math.min(loopEnd+1,max):max;if(noteIndex>=end){if(loopMode){noteIndex=loopStart}else{stopPlaying();return}}
 Object.entries(VOICES).forEach(([v])=>{if(voiceStates[v]==='muted')return;const notes=currentHymn.parts[v];if(noteIndex<notes.length){const solo=Object.values(voiceStates).some(s=>s==='solo');if(!solo||voiceStates[v]==='solo')playNote(notes[noteIndex],beat*.9,v===selectedVoice?.35:.15)}});
-if(selectedVoice&&currentHymn.parts[selectedVoice][noteIndex]){const orig=currentHymn.parts[selectedVoice][noteIndex];currentNote=transposeNote(orig,keyOffset);document.getElementById('current-note').textContent=formatNote(currentNote);
-// Delay target update by TARGET_DELAY ms
-setTimeout(()=>{targetNote=currentNote;document.getElementById('target-note').textContent=formatNote(currentNote);document.getElementById('target-freq').textContent=Math.round(noteToFreq(orig,keyOffset))+' Hz'},TARGET_DELAY)}
+if(selectedVoice&&currentHymn.parts[selectedVoice][noteIndex]){const orig=currentHymn.parts[selectedVoice][noteIndex];currentNote=transposeNote(orig,keyOffset);document.getElementById('current-note').textContent=formatNote(currentNote);renderSheetMusic(noteIndex);setTimeout(()=>{targetNote=currentNote;document.getElementById('target-note').textContent=formatNote(currentNote);document.getElementById('target-freq').textContent=Math.round(noteToFreq(orig,keyOffset))+' Hz'},TARGET_DELAY)}
 updateProgressDots();noteIndex++}next();playInterval=setInterval(next,beat*1000)}
-function stopPlaying(){if(playInterval)clearInterval(playInterval);playInterval=null;isPlaying=false;noteIndex=0;currentNote=null;targetNote=null;document.getElementById('play-btn').textContent='▶';document.getElementById('current-note').textContent='—';document.getElementById('target-note').textContent='—';document.getElementById('target-freq').textContent='';updateProgressDots()}
+function stopPlaying(){if(playInterval)clearInterval(playInterval);playInterval=null;isPlaying=false;noteIndex=0;currentNote=null;targetNote=null;document.getElementById('play-btn').textContent='▶';document.getElementById('current-note').textContent='—';document.getElementById('target-note').textContent='—';document.getElementById('target-freq').textContent='';updateProgressDots();if(selectedVoice)renderSheetMusic(-1)}
 
 function adjustTempo(d){tempoOffset=Math.max(-40,Math.min(60,tempoOffset+d));updateTempoDisplay();if(isPlaying){stopPlaying();startPlaying()}}
 function updateTempoDisplay(){if(currentHymn)document.getElementById('tempo-display').textContent=(currentHymn.tempo+tempoOffset)}
@@ -360,238 +403,32 @@ function setLoopFromDot(i){if(!loopMode)return;loopStart=i;loopEnd=i;document.ge
 
 function autoCorrelate(buf,sr){const S=buf.length,M=Math.floor(S/2);let b=-1,bc=0,rms=0;for(let i=0;i<S;i++)rms+=buf[i]*buf[i];rms=Math.sqrt(rms/S);if(rms<.01)return -1;const c=new Array(M);let l=1;for(let o=0;o<M;o++){let x=0;for(let i=0;i<M;i++)x+=Math.abs(buf[i]-buf[i+o]);x=1-x/M;c[o]=x;if(x>.9&&x>l&&x>bc){bc=x;b=o}l=x}return b>-1&&bc>.01?sr/b:-1}
 function freqToNoteName(f){if(f<=0)return null;const n=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];const num=12*Math.log2(f/440)+69;const r=Math.round(num);return{name:n[((r%12)+12)%12]+(Math.floor(r/12)-1),cents:Math.round((num-r)*100),freq:f}}
-
-// Smoothed pitch detection
-function getSmoothedPitch(freq){pitchHistory.push(freq);if(pitchHistory.length>PITCH_HISTORY_SIZE)pitchHistory.shift();const validPitches=pitchHistory.filter(p=>p>0);if(validPitches.length<3)return -1;validPitches.sort((a,b)=>a-b);return validPitches[Math.floor(validPitches.length/2)]}
+function getSmoothedPitch(freq){pitchHistory.push(freq);if(pitchHistory.length>PITCH_HISTORY_SIZE)pitchHistory.shift();const vp=pitchHistory.filter(p=>p>0);if(vp.length<3)return -1;vp.sort((a,b)=>a-b);return vp[Math.floor(vp.length/2)]}
 
 function toggleMic(){isListening?stopListening():startListening()}
 function togglePlaybackMute(){playbackMuted=!playbackMuted;const b=document.getElementById('mute-playback-btn');b.textContent=playbackMuted?'🔊 Unmute':'🔇 Mute Playback';b.style.background=playbackMuted?'#22c55e':'#eab308'}
 async function startListening(){try{document.getElementById('mic-error').classList.add('hidden');if(micStream)micStream.getTracks().forEach(t=>t.stop());if(micCtx&&micCtx.state!=='closed')await micCtx.close();if(animFrame)cancelAnimationFrame(animFrame);pitchHistory=[];micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});micCtx=new(window.AudioContext||window.webkitAudioContext)();if(micCtx.state==='suspended')await micCtx.resume();analyser=micCtx.createAnalyser();analyser.fftSize=2048;analyser.smoothingTimeConstant=0.8;micCtx.createMediaStreamSource(micStream).connect(analyser);isListening=true;document.getElementById('mic-btn').classList.add('listening');document.getElementById('mic-btn-text').textContent='Stop';document.getElementById('pitch-ui').classList.remove('hidden');document.getElementById('mic-prompt').classList.add('hidden');document.getElementById('headphone-warning').classList.remove('hidden');const buf=new Float32Array(analyser.fftSize);function detect(){if(!analyser||!micCtx)return;analyser.getFloatTimeDomainData(buf);const rawFreq=autoCorrelate(buf,micCtx.sampleRate);const f=getSmoothedPitch(rawFreq);if(f>50&&f<1500){updatePitchDisplay(freqToNoteName(f))}else{clearPitchDisplay()}animFrame=requestAnimationFrame(detect)}detect()}catch(e){document.getElementById('mic-error').textContent='⚠️ '+e.message;document.getElementById('mic-error').classList.remove('hidden');isListening=false}}
 function stopListening(){if(animFrame)cancelAnimationFrame(animFrame);if(micStream)micStream.getTracks().forEach(t=>t.stop());if(micCtx&&micCtx.state!=='closed')micCtx.close();micStream=null;micCtx=null;analyser=null;animFrame=null;isListening=false;pitchHistory=[];document.getElementById('mic-btn').classList.remove('listening');document.getElementById('mic-btn-text').textContent='Start';document.getElementById('pitch-ui').classList.add('hidden');document.getElementById('mic-prompt').classList.remove('hidden');document.getElementById('headphone-warning').classList.add('hidden');clearPitchDisplay()}
 
-function updatePitchDisplay(info){const db=document.getElementById('detected-box'),tb=document.getElementById('target-box'),fb=document.getElementById('feedback-bar'),cd=document.getElementById('cents-display');document.getElementById('detected-note').textContent=formatNote(info.name);document.getElementById('detected-freq').textContent=Math.round(info.freq)+' Hz';
-if(targetNote){const tf=noteToFreq(targetNote);const cents=Math.round(1200*Math.log2(info.freq/tf));const ac=Math.abs(cents);cd.textContent=(cents>=0?'+':'')+cents+' cents';
-if(ac<=15){db.className='pitch-box good';tb.className='pitch-box good';fb.className='feedback-bar perfect';fb.textContent='✓ Perfect!'}
-else if(ac<=30){db.className='pitch-box good';tb.className='pitch-box good';fb.className='feedback-bar good';fb.textContent='✓ Good!'}
-else if(ac<=60){db.className='pitch-box bad';tb.className='pitch-box neutral';fb.className='feedback-bar ok';fb.textContent=cents>0?'↑ Sharp':'↓ Flat'}
-else{db.className='pitch-box bad';tb.className='pitch-box bad';fb.className='feedback-bar bad';fb.textContent=cents>0?'⬆ Too Sharp!':'⬇ Too Flat!'}}
-else{db.className='pitch-box neutral';tb.className='pitch-box neutral';fb.className='feedback-bar';fb.textContent='Press play';cd.textContent=''}}
+function updatePitchDisplay(info){const db=document.getElementById('detected-box'),tb=document.getElementById('target-box'),fb=document.getElementById('feedback-bar'),cd=document.getElementById('cents-display');document.getElementById('detected-note').textContent=formatNote(info.name);document.getElementById('detected-freq').textContent=Math.round(info.freq)+' Hz';if(targetNote){const tf=noteToFreq(targetNote);const cents=Math.round(1200*Math.log2(info.freq/tf));const ac=Math.abs(cents);cd.textContent=(cents>=0?'+':'')+cents+' cents';if(ac<=15){db.className='pitch-box good';tb.className='pitch-box good';fb.className='feedback-bar perfect';fb.textContent='✓ Perfect!'}else if(ac<=30){db.className='pitch-box good';tb.className='pitch-box good';fb.className='feedback-bar good';fb.textContent='✓ Good!'}else if(ac<=60){db.className='pitch-box bad';tb.className='pitch-box neutral';fb.className='feedback-bar ok';fb.textContent=cents>0?'↑ Sharp':'↓ Flat'}else{db.className='pitch-box bad';tb.className='pitch-box bad';fb.className='feedback-bar bad';fb.textContent=cents>0?'⬆ Too Sharp!':'⬇ Too Flat!'}}else{db.className='pitch-box neutral';tb.className='pitch-box neutral';fb.className='feedback-bar';fb.textContent='Press play';cd.textContent=''}}
 function clearPitchDisplay(){document.getElementById('detected-note').textContent='—';document.getElementById('detected-freq').textContent='';document.getElementById('detected-box').className='pitch-box neutral';document.getElementById('target-box').className='pitch-box neutral';document.getElementById('feedback-bar').className='feedback-bar';document.getElementById('feedback-bar').textContent='Sing a note...';document.getElementById('cents-display').textContent=''}
 
 // Scan functionality
-let selectedImage = null;
-let selectedFileName = '';
-
+let selectedImage=null,selectedFileName='',pendingHymnData=null;
 function openScanModal(){document.getElementById('scan-modal').classList.remove('hidden')}
 function closeScanModal(){document.getElementById('scan-modal').classList.add('hidden');selectedImage=null;selectedFileName='';document.getElementById('preview-image').classList.add('hidden');document.getElementById('pdf-notice').classList.add('hidden');document.getElementById('scan-btn').disabled=true;document.getElementById('scan-status').classList.add('hidden');document.getElementById('scan-status').style.color='#a1a1aa'}
+async function handleFileSelect(e){const file=e.target.files[0];if(!file)return;selectedFileName=file.name;if(file.type==='application/pdf'){document.getElementById('preview-image').classList.add('hidden');document.getElementById('pdf-notice').classList.remove('hidden');document.getElementById('pdf-notice').textContent='📄 PDF: '+file.name;try{const ab=await file.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:ab}).promise;const page=await pdf.getPage(1);const scale=2;const vp=page.getViewport({scale});const canvas=document.createElement('canvas');canvas.width=vp.width;canvas.height=vp.height;await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;selectedImage=canvas.toDataURL('image/png');document.getElementById('preview-image').src=selectedImage;document.getElementById('preview-image').classList.remove('hidden');document.getElementById('pdf-notice').textContent='📄 PDF converted: '+file.name;document.getElementById('scan-btn').disabled=false}catch(err){document.getElementById('pdf-notice').textContent='❌ Error: '+err.message;document.getElementById('pdf-notice').style.color='#f87171'}}else{document.getElementById('pdf-notice').classList.add('hidden');const reader=new FileReader();reader.onload=function(ev){selectedImage=ev.target.result;document.getElementById('preview-image').src=selectedImage;document.getElementById('preview-image').classList.remove('hidden');document.getElementById('scan-btn').disabled=false};reader.readAsDataURL(file)}}
+async function scanHymn(){if(!selectedImage)return;const status=document.getElementById('scan-status');status.classList.remove('hidden');status.style.color='#a1a1aa';status.textContent='Analyzing...';document.getElementById('scan-btn').disabled=true;try{const base64=selectedImage.split(',')[1];const mediaType=selectedImage.split(';')[0].split(':')[1];const response=await fetch('/api/scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:base64,mediaType})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Failed');if(!data.content||!data.content[0])throw new Error('Invalid response');const text=data.content[0].text;let hymnData;try{hymnData=JSON.parse(text)}catch(e){const m=text.match(/\{[\s\S]*\}/);if(m)hymnData=JSON.parse(m[0]);else throw new Error('Could not parse')}if(!hymnData.parts)throw new Error('No parts found');pendingHymnData=hymnData;closeScanModal();showReviewModal(hymnData)}catch(e){status.textContent='Error: '+e.message;status.style.color='#f87171';document.getElementById('scan-btn').disabled=false}}
+function showReviewModal(d){document.getElementById('review-modal').classList.remove('hidden');document.getElementById('review-title').value=d.title||'';document.getElementById('review-key').value=d.key||'';document.getElementById('review-tempo').value=d.tempo||72;document.getElementById('review-verse').value=(d.verse||[]).join('\n');document.getElementById('review-soprano').value=(d.parts?.soprano||[]).join(' ');document.getElementById('review-alto').value=(d.parts?.alto||[]).join(' ');document.getElementById('review-tenor').value=(d.parts?.tenor||[]).join(' ');document.getElementById('review-bass').value=(d.parts?.bass||[]).join(' ');updateNoteCounts()}
+function closeReviewModal(){document.getElementById('review-modal').classList.add('hidden');pendingHymnData=null}
+function updateNoteCounts(){const s=document.getElementById('review-soprano').value.trim().split(/\s+/).filter(n=>n);const a=document.getElementById('review-alto').value.trim().split(/\s+/).filter(n=>n);const t=document.getElementById('review-tenor').value.trim().split(/\s+/).filter(n=>n);const b=document.getElementById('review-bass').value.trim().split(/\s+/).filter(n=>n);document.getElementById('count-soprano').textContent=s.length;document.getElementById('count-alto').textContent=a.length;document.getElementById('count-tenor').textContent=t.length;document.getElementById('count-bass').textContent=b.length;const same=s.length===a.length&&a.length===t.length&&t.length===b.length;document.getElementById('count-warning').classList.toggle('hidden',same||s.length===0)}
+document.addEventListener('DOMContentLoaded',()=>{['review-soprano','review-alto','review-tenor','review-bass'].forEach(id=>{document.getElementById(id)?.addEventListener('input',updateNoteCounts)})});
+function saveReviewedHymn(){const title=document.getElementById('review-title').value.trim();if(!title){alert('Enter a title');return}const hymnData={id:'custom-'+Date.now(),title,author:'Scanned',key:document.getElementById('review-key').value.trim()||'Unknown',tempo:parseInt(document.getElementById('review-tempo').value)||72,verse:document.getElementById('review-verse').value.trim().split('\n').filter(l=>l),parts:{soprano:document.getElementById('review-soprano').value.trim().split(/\s+/).filter(n=>n),alto:document.getElementById('review-alto').value.trim().split(/\s+/).filter(n=>n),tenor:document.getElementById('review-tenor').value.trim().split(/\s+/).filter(n=>n),bass:document.getElementById('review-bass').value.trim().split(/\s+/).filter(n=>n)}};CUSTOM_HYMNS[hymnData.id]=hymnData;localStorage.setItem('customHymns',JSON.stringify(CUSTOM_HYMNS));closeReviewModal();renderHymnList()}
 
-async function handleFileSelect(e){
-const file=e.target.files[0];
-if(!file)return;
-selectedFileName=file.name;
-
-if(file.type==='application/pdf'){
-// Handle PDF - convert first page to image using PDF.js
-document.getElementById('preview-image').classList.add('hidden');
-document.getElementById('pdf-notice').classList.remove('hidden');
-document.getElementById('pdf-notice').textContent='📄 PDF selected: '+file.name;
-
-try{
-const arrayBuffer=await file.arrayBuffer();
-const pdf=await pdfjsLib.getDocument({data:arrayBuffer}).promise;
-const page=await pdf.getPage(1);
-const scale=2; // Higher scale = better quality
-const viewport=page.getViewport({scale});
-
-const canvas=document.createElement('canvas');
-canvas.width=viewport.width;
-canvas.height=viewport.height;
-const ctx=canvas.getContext('2d');
-
-await page.render({canvasContext:ctx,viewport}).promise;
-selectedImage=canvas.toDataURL('image/png');
-
-document.getElementById('preview-image').src=selectedImage;
-document.getElementById('preview-image').classList.remove('hidden');
-document.getElementById('pdf-notice').textContent='📄 PDF converted: '+file.name+' (page 1)';
-document.getElementById('scan-btn').disabled=false;
-}catch(err){
-document.getElementById('pdf-notice').textContent='❌ Error reading PDF: '+err.message;
-document.getElementById('pdf-notice').style.color='#f87171';
-}
-}else{
-// Handle image
-document.getElementById('pdf-notice').classList.add('hidden');
-const reader=new FileReader();
-reader.onload=function(ev){
-selectedImage=ev.target.result;
-document.getElementById('preview-image').src=selectedImage;
-document.getElementById('preview-image').classList.remove('hidden');
-document.getElementById('scan-btn').disabled=false;
-};
-reader.readAsDataURL(file);
-}
-}
-
-let pendingHymnData = null;
-
-async function scanHymn(){
-if(!selectedImage)return;
-
-const status=document.getElementById('scan-status');
-status.classList.remove('hidden');
-status.style.color='#a1a1aa';
-status.textContent='Analyzing sheet music...';
-document.getElementById('scan-btn').disabled=true;
-
-try{
-const base64=selectedImage.split(',')[1];
-const mediaType=selectedImage.split(';')[0].split(':')[1];
-
-status.textContent='Sending to AI for analysis...';
-
-const response=await fetch('/api/scan',{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({image:base64,mediaType})
-});
-
-const responseData=await response.json();
-
-if(!response.ok){
-throw new Error(responseData.error||'API request failed (status '+response.status+')');
-}
-
-if(!responseData.content || !responseData.content[0] || !responseData.content[0].text){
-console.error('Unexpected response:', responseData);
-throw new Error('Unexpected response format from AI');
-}
-
-status.textContent='Parsing results...';
-const text=responseData.content[0].text;
-console.log('AI Response:', text);
-
-// Parse JSON from response - try multiple approaches
-let hymnData;
-try{
-// First try: direct parse
-hymnData=JSON.parse(text);
-}catch(e1){
-try{
-// Second try: remove markdown code blocks
-const cleaned = text.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
-hymnData=JSON.parse(cleaned);
-}catch(e2){
-try{
-// Third try: find JSON object in text
-const match = text.match(/\{[\s\S]*\}/);
-if(match){
-hymnData=JSON.parse(match[0]);
-}else{
-throw new Error('No JSON found in response');
-}
-}catch(e3){
-console.error('Parse attempts failed:', text);
-throw new Error('Could not parse hymn data. Check console for details.');
-}
-}
-}
-
-// Validate required fields
-if(!hymnData.parts){
-throw new Error('No voice parts found in response');
-}
-
-// Store pending data and show review modal
-pendingHymnData = hymnData;
-closeScanModal();
-showReviewModal(hymnData);
-
-}catch(e){
-status.textContent='Error: '+e.message;
-status.style.color='#f87171';
-document.getElementById('scan-btn').disabled=false;
-}
-}
-
-function showReviewModal(data){
-document.getElementById('review-modal').classList.remove('hidden');
-document.getElementById('review-title').value = data.title || '';
-document.getElementById('review-key').value = data.key || '';
-document.getElementById('review-tempo').value = data.tempo || 72;
-document.getElementById('review-verse').value = (data.verse || []).join('\n');
-document.getElementById('review-soprano').value = (data.parts?.soprano || []).join(' ');
-document.getElementById('review-alto').value = (data.parts?.alto || []).join(' ');
-document.getElementById('review-tenor').value = (data.parts?.tenor || []).join(' ');
-document.getElementById('review-bass').value = (data.parts?.bass || []).join(' ');
-updateNoteCounts();
-}
-
-function closeReviewModal(){
-document.getElementById('review-modal').classList.add('hidden');
-pendingHymnData = null;
-}
-
-function updateNoteCounts(){
-const soprano = document.getElementById('review-soprano').value.trim().split(/\s+/).filter(n=>n);
-const alto = document.getElementById('review-alto').value.trim().split(/\s+/).filter(n=>n);
-const tenor = document.getElementById('review-tenor').value.trim().split(/\s+/).filter(n=>n);
-const bass = document.getElementById('review-bass').value.trim().split(/\s+/).filter(n=>n);
-
-document.getElementById('count-soprano').textContent = soprano.length;
-document.getElementById('count-alto').textContent = alto.length;
-document.getElementById('count-tenor').textContent = tenor.length;
-document.getElementById('count-bass').textContent = bass.length;
-
-const allSame = soprano.length === alto.length && alto.length === tenor.length && tenor.length === bass.length;
-document.getElementById('count-warning').classList.toggle('hidden', allSame || soprano.length === 0);
-}
-
-// Add event listeners for note counting
-document.addEventListener('DOMContentLoaded', () => {
-['review-soprano','review-alto','review-tenor','review-bass'].forEach(id => {
-document.getElementById(id)?.addEventListener('input', updateNoteCounts);
-});
-});
-
-function saveReviewedHymn(){
-const title = document.getElementById('review-title').value.trim();
-if(!title){alert('Please enter a title');return}
-
-const hymnData = {
-id: 'custom-' + Date.now(),
-title: title,
-author: 'Scanned',
-key: document.getElementById('review-key').value.trim() || 'Unknown',
-tempo: parseInt(document.getElementById('review-tempo').value) || 72,
-verse: document.getElementById('review-verse').value.trim().split('\n').filter(l=>l),
-parts: {
-soprano: document.getElementById('review-soprano').value.trim().split(/\s+/).filter(n=>n),
-alto: document.getElementById('review-alto').value.trim().split(/\s+/).filter(n=>n),
-tenor: document.getElementById('review-tenor').value.trim().split(/\s+/).filter(n=>n),
-bass: document.getElementById('review-bass').value.trim().split(/\s+/).filter(n=>n)
-}
-};
-
-// Save to localStorage
-CUSTOM_HYMNS[hymnData.id] = hymnData;
-localStorage.setItem('customHymns', JSON.stringify(CUSTOM_HYMNS));
-
-closeReviewModal();
-renderHymnList();
-}
-
-function renderHymnList(){const l=document.getElementById('hymn-list');l.innerHTML='';
-// Scan card first
-const scanCard=document.createElement('div');scanCard.className='hymn-card scan-card';scanCard.innerHTML='<div class="icon">📷</div><h3>Scan New Hymn</h3><div class="verse">Take a photo of sheet music</div>';scanCard.onclick=openScanModal;l.appendChild(scanCard);
-// Built-in hymns
-Object.values(HYMNS).forEach(h=>{const c=document.createElement('div');c.className='hymn-card';c.innerHTML='<h3>'+h.title+'</h3><div class="author">'+h.author+'</div><div class="verse">"'+h.verse[0]+'"</div>';c.onclick=()=>selectHymn(h);l.appendChild(c)});
-// Custom hymns
-Object.values(CUSTOM_HYMNS).forEach(h=>{const c=document.createElement('div');c.className='hymn-card';c.innerHTML='<h3>'+h.title+'</h3><div class="author">'+h.author+' <span style="color:#6366f1">• Scanned</span></div><div class="verse">"'+(h.verse[0]||'')+'"</div>';c.onclick=()=>selectHymn(h);l.appendChild(c)})}
-
-function selectHymn(h){currentHymn=h;selectedVoice=null;voiceStates={soprano:'on',alto:'on',tenor:'on',bass:'on'};tempoOffset=0;keyOffset=0;loopMode=false;loopStart=0;loopEnd=Math.min(3,h.parts.soprano.length-1);document.getElementById('hymn-select').classList.add('hidden');document.getElementById('practice').classList.remove('hidden');document.getElementById('hymn-title').textContent=h.title;document.getElementById('hymn-meta').textContent=h.author+' • '+h.key+' • '+h.tempo+' BPM';document.getElementById('verse-text').innerHTML=h.verse.map(l=>'<p style="margin:4px 0;color:#a1a1aa;font-style:italic;line-height:1.8">'+l+'</p>').join('');document.getElementById('loop-toggle').classList.remove('active');document.getElementById('loop-range-controls').style.display='none';document.getElementById('loop-indicator').style.display='none';document.getElementById('loop-start').value=loopStart+1;document.getElementById('loop-end').value=loopEnd+1;updateTempoDisplay();updateKeyDisplay();renderVoiceGrid();renderInstruments();renderProgressDots()}
+function renderHymnList(){const l=document.getElementById('hymn-list');l.innerHTML='';const scanCard=document.createElement('div');scanCard.className='hymn-card scan-card';scanCard.innerHTML='<div class="icon">📷</div><h3>Scan New Hymn</h3><div class="verse">Take a photo of sheet music</div>';scanCard.onclick=openScanModal;l.appendChild(scanCard);Object.values(HYMNS).forEach(h=>{const c=document.createElement('div');c.className='hymn-card';c.innerHTML='<h3>'+h.title+'</h3><div class="author">'+h.author+'</div><div class="verse">"'+h.verse[0]+'"</div>';c.onclick=()=>selectHymn(h);l.appendChild(c)});Object.values(CUSTOM_HYMNS).forEach(h=>{const c=document.createElement('div');c.className='hymn-card';c.innerHTML='<h3>'+h.title+'</h3><div class="author">'+h.author+' <span style="color:#6366f1">• Scanned</span></div><div class="verse">"'+(h.verse[0]||'')+'"</div>';c.onclick=()=>selectHymn(h);l.appendChild(c)})}
+function selectHymn(h){currentHymn=h;selectedVoice=null;voiceStates={soprano:'on',alto:'on',tenor:'on',bass:'on'};tempoOffset=0;keyOffset=0;loopMode=false;loopStart=0;loopEnd=Math.min(3,h.parts.soprano.length-1);document.getElementById('hymn-select').classList.add('hidden');document.getElementById('practice').classList.remove('hidden');document.getElementById('hymn-title').textContent=h.title;document.getElementById('hymn-meta').textContent=h.author+' • '+h.key+' • '+h.tempo+' BPM';document.getElementById('verse-text').innerHTML=h.verse.map(l=>'<p style="margin:4px 0;color:#a1a1aa;font-style:italic;line-height:1.8">'+l+'</p>').join('');document.getElementById('loop-toggle').classList.remove('active');document.getElementById('loop-range-controls').style.display='none';document.getElementById('loop-indicator').style.display='none';document.getElementById('loop-start').value=loopStart+1;document.getElementById('loop-end').value=loopEnd+1;document.getElementById('sheet-music').innerHTML='<p style="text-align:center;color:#71717a;padding:40px">Select a voice part to see sheet music</p>';document.getElementById('note-counter').textContent='Note 0 / 0';updateTempoDisplay();updateKeyDisplay();renderVoiceGrid();renderInstruments();renderProgressDots()}
 function goBack(){stopPlaying();stopListening();currentHymn=null;selectedVoice=null;document.getElementById('hymn-select').classList.remove('hidden');document.getElementById('practice').classList.add('hidden')}
-function renderVoiceGrid(){const g=document.getElementById('voice-grid');g.innerHTML='';Object.entries(VOICES).forEach(([v,info])=>{const c=document.createElement('div');c.className='voice-card'+(selectedVoice===v?' selected':'')+(voiceStates[v]==='muted'?' muted':'');c.style.setProperty('--voice-color',info.color);c.style.setProperty('--voice-bg',info.color+'33');if(selectedVoice===v)c.style.color=info.color;c.innerHTML='<div class="name">'+v+'</div><div class="range">'+info.range+'</div><div class="voice-controls"><button class="'+(voiceStates[v]==='solo'?'active':'')+'" style="--voice-color:'+info.color+'" onclick="event.stopPropagation();toggleVoiceState(\''+v+'\',\'solo\')">S</button><button class="'+(voiceStates[v]==='muted'?'active':'')+'" style="--voice-color:'+info.color+'" onclick="event.stopPropagation();toggleVoiceState(\''+v+'\',\'muted\')">M</button></div>';c.onclick=()=>{selectedVoice=v;renderVoiceGrid();renderProgressDots();document.getElementById('current-note-display').style.display=isPlaying?'block':'none'};g.appendChild(c)})}
+function renderVoiceGrid(){const g=document.getElementById('voice-grid');g.innerHTML='';Object.entries(VOICES).forEach(([v,info])=>{const c=document.createElement('div');c.className='voice-card'+(selectedVoice===v?' selected':'')+(voiceStates[v]==='muted'?' muted':'');c.style.setProperty('--voice-color',info.color);if(selectedVoice===v)c.style.color=info.color;c.innerHTML='<div class="name">'+v+'</div><div class="range">'+info.range+'</div><div class="voice-controls"><button class="'+(voiceStates[v]==='solo'?'active':'')+'" style="--voice-color:'+info.color+'" onclick="event.stopPropagation();toggleVoiceState(\''+v+'\',\'solo\')">S</button><button class="'+(voiceStates[v]==='muted'?'active':'')+'" style="--voice-color:'+info.color+'" onclick="event.stopPropagation();toggleVoiceState(\''+v+'\',\'muted\')">M</button></div>';c.onclick=()=>{selectedVoice=v;renderVoiceGrid();renderProgressDots();renderSheetMusic(-1);document.getElementById('current-note-display').style.display=isPlaying?'block':'none'};g.appendChild(c)})}
 function toggleVoiceState(v,s){if(voiceStates[v]===s){voiceStates[v]='on'}else{if(s==='solo')Object.keys(voiceStates).forEach(x=>{if(voiceStates[x]==='solo')voiceStates[x]='on'});voiceStates[v]=s}renderVoiceGrid()}
 function renderInstruments(){const r=document.getElementById('instrument-row');r.innerHTML='';Object.entries(INSTRUMENTS).forEach(([id,i])=>{const b=document.createElement('button');b.className='instrument-btn'+(selectedInstrument===id?' selected':'');b.innerHTML='<span>'+i.icon+'</span> '+i.name;b.onclick=()=>{selectedInstrument=id;renderInstruments()};r.appendChild(b)})}
 function renderProgressDots(){const d=document.getElementById('progress-dots');if(!currentHymn)return;const max=Math.max(...Object.values(currentHymn.parts).map(p=>p.length));d.innerHTML='';for(let i=0;i<max;i++){const dot=document.createElement('div');dot.className='progress-dot';if(loopMode&&i>=loopStart&&i<=loopEnd)dot.classList.add('in-range');if(loopMode&&(i===loopStart||i===loopEnd))dot.classList.add('loop-marker');if(selectedVoice)dot.style.setProperty('--voice-color',VOICES[selectedVoice].color);dot.onclick=()=>setLoopFromDot(i);d.appendChild(dot)}}
@@ -599,6 +436,5 @@ function updateProgressDots(){document.querySelectorAll('.progress-dot').forEach
 
 document.addEventListener('DOMContentLoaded',()=>{renderHymnList();if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})});
 </script>
-
 </body>
 </html>
