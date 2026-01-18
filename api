@@ -1,0 +1,81 @@
+export default async function handler(req, res) {
+  // Only allow POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  
+  if (!apiKey) {
+    return res.status(500).json({ error: 'API key not configured' });
+  }
+
+  try {
+    const { image, mediaType } = req.body;
+
+    if (!image) {
+      return res.status(400).json({ error: 'No image provided' });
+    }
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4096,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: {
+                type: 'base64',
+                media_type: mediaType || 'image/png',
+                data: image
+              }
+            },
+            {
+              type: 'text',
+              text: `Analyze this hymn sheet music and extract the notes for each voice part (Soprano, Alto, Tenor, Bass).
+
+Return ONLY valid JSON in this exact format, no other text:
+{
+  "title": "Hymn Title",
+  "author": "Composer/Author if visible",
+  "key": "Key signature (e.g. G Major)",
+  "tempo": 72,
+  "verse": ["First line of lyrics", "Second line"],
+  "parts": {
+    "soprano": ["C4", "D4", "E4"],
+    "alto": ["A3", "B3", "C4"],
+    "tenor": ["E3", "F3", "G3"],
+    "bass": ["C3", "D3", "E3"]
+  }
+}
+
+Notes should be in format like C4, D#4, Eb4, etc. Include all notes in order.
+If you cannot read a part clearly, make a reasonable guess based on typical hymn harmonies.
+Only return the JSON, nothing else.`
+            }
+          ]
+        }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      return res.status(response.status).json({ error: err.error?.message || 'API request failed' });
+    }
+
+    const data = await response.json();
+    return res.status(200).json(data);
+
+  } catch (error) {
+    console.error('Scan error:', error);
+    return res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+}
