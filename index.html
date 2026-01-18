@@ -211,11 +211,6 @@ footer{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #
         </div>
         <img id="preview-image" class="preview-image hidden">
         <div id="pdf-notice" class="hidden" style="padding:12px;background:#27272a;border-radius:10px;margin-top:12px;font-size:13px;color:#a1a1aa"></div>
-        <div class="api-key-section">
-          <label>Anthropic API Key (stored locally)</label>
-          <input type="password" class="api-key-input" id="api-key" placeholder="sk-ant-..." onchange="saveApiKey()">
-          <p style="font-size:12px;color:#71717a;margin-top:8px">Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:#818cf8">console.anthropic.com</a></p>
-        </div>
         <button class="scan-btn" id="scan-btn" onclick="scanHymn()" disabled>Analyze Sheet Music</button>
         <div id="scan-status" class="scan-status hidden"></div>
         <button style="width:100%;padding:12px;background:#27272a;border:1px solid #3f3f46;border-radius:10px;color:#a1a1aa;margin-top:12px;cursor:pointer" onclick="closeScanModal()">Cancel</button>
@@ -227,9 +222,21 @@ footer{text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #
 
 <script>
 const HYMNS={
-'amazing-grace':{id:'amazing-grace',title:'Amazing Grace',author:'John Newton, 1779',key:'G Major',tempo:72,verse:["Amazing grace! How sweet the sound","That saved a wretch like me!","I once was lost, but now am found;","Was blind, but now I see."],parts:{soprano:['D4','G4','B4','A4','G4','E4','D4','D4','G4','B4','A4','G4'],alto:['B3','D4','D4','D4','D4','C4','B3','B3','D4','D4','F#4','D4'],tenor:['G3','B3','G3','F#3','B3','G3','G3','G3','B3','G3','D4','B3'],bass:['G2','G3','G3','D3','G3','C3','G2','G2','G3','G3','D3','G2']}},
-'holy-holy-holy':{id:'holy-holy-holy',title:'Holy, Holy, Holy',author:'Reginald Heber, 1826',key:'D Major',tempo:84,verse:["Holy, holy, holy!","Lord God Almighty!"],parts:{soprano:['D4','D4','F#4','F#4','A4','A4','B4','B4','A4','G4','F#4','D4'],alto:['D4','D4','D4','D4','F#4','E4','G4','F#4','F#4','E4','D4','D4'],tenor:['A3','A3','A3','A3','D4','C#4','D4','D4','D4','B3','A3','F#3'],bass:['D3','D3','D3','D3','D3','A2','G3','G3','D3','E3','D3','D3']}},
-'be-thou-my-vision':{id:'be-thou-my-vision',title:'Be Thou My Vision',author:'Irish, 8th Century',key:'Eb Major',tempo:90,verse:["Be Thou my Vision,","O Lord of my heart"],parts:{soprano:['Eb4','Eb4','F4','G4','Ab4','Bb4','C5','Bb4','Ab4','G4','F4','Eb4'],alto:['Bb3','Bb3','Bb3','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','D4','Eb4'],tenor:['G3','G3','F3','Bb3','Ab3','G3','Ab3','G3','Ab3','Bb3','Bb3','G3'],bass:['Eb3','Eb3','D3','Eb3','C3','Eb3','Ab2','Eb3','C3','Eb3','Bb2','Eb3']}}
+'amazing-grace':{id:'amazing-grace',title:'Amazing Grace',author:'John Newton, 1779',key:'G Major',tempo:72,verse:["Amazing grace! How sweet the sound","That saved a wretch like me!","I once was lost, but now am found;","Was blind, but now I see."],parts:{
+soprano:['D4','G4','B4','B4','A4','G4','B4','A4','G4','E4','D4','D4','G4','B4','B4','A4','G4','B4','A4','B4','D5','D5','B4','D5','D5','B4','D5','B4','G4','E4','D4','D4','G4','B4','B4','A4','G4','B4','A4','G4'],
+alto:['B3','D4','D4','D4','D4','D4','D4','D4','B3','C4','B3','B3','D4','D4','D4','D4','D4','D4','F#4','G4','G4','G4','G4','G4','G4','G4','G4','G4','D4','C4','B3','B3','D4','D4','D4','D4','D4','D4','D4','D4'],
+tenor:['G3','B3','G3','G3','F#3','G3','G3','F#3','G3','G3','G3','G3','B3','G3','G3','F#3','G3','G3','D4','D4','B3','D4','B3','B3','B3','D4','D4','D4','B3','G3','G3','G3','B3','G3','G3','F#3','G3','G3','F#3','G3'],
+bass:['G2','G3','G3','G3','D3','G3','G3','D3','G3','C3','G2','G2','G3','G3','G3','D3','G3','G3','D3','G3','G3','G3','G3','G3','G3','G3','G3','G3','G3','C3','G2','G2','G3','G3','G3','D3','G3','G3','D3','G2']}},
+'holy-holy-holy':{id:'holy-holy-holy',title:'Holy, Holy, Holy',author:'Reginald Heber, 1826',key:'D Major',tempo:96,verse:["Holy, holy, holy!","Lord God Almighty!","Early in the morning","our song shall rise to Thee"],parts:{
+soprano:['D4','D4','F#4','F#4','A4','A4','B4','A4','F#4','D4','E4','F#4','G4','G4','F#4','E4','F#4','D4','D4','F#4','F#4','A4','A4','B4','A4','F#4','D4','E4','F#4','E4','E4','D4'],
+alto:['D4','D4','D4','D4','F#4','F#4','G4','F#4','D4','D4','C#4','D4','E4','E4','D4','C#4','D4','D4','D4','D4','D4','F#4','F#4','G4','F#4','D4','D4','C#4','D4','C#4','C#4','D4'],
+tenor:['A3','A3','A3','A3','A3','D4','D4','D4','A3','F#3','A3','A3','A3','A3','A3','A3','A3','A3','A3','A3','A3','A3','D4','D4','D4','A3','F#3','A3','A3','A3','A3','F#3'],
+bass:['D3','D3','D3','D3','D3','D3','G3','D3','D3','D3','A2','D3','A2','A2','D3','A2','D3','D3','D3','D3','D3','D3','D3','G3','D3','D3','D3','A2','D3','A2','A2','D3']}},
+'be-thou-my-vision':{id:'be-thou-my-vision',title:'Be Thou My Vision',author:'Irish, 8th Century',key:'Eb Major',tempo:100,verse:["Be Thou my Vision,","O Lord of my heart;","Naught be all else to me,","save that Thou art."],parts:{
+soprano:['Eb4','F4','G4','Ab4','Bb4','Bb4','C5','Bb4','Ab4','G4','F4','G4','Ab4','G4','F4','Eb4','F4','G4','Ab4','Bb4','Bb4','C5','Bb4','Ab4','G4','Ab4','Bb4','Ab4','G4','F4','Eb4'],
+alto:['Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','D4','Eb4','Eb4','Eb4','D4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','Eb4','D4','Eb4'],
+tenor:['G3','Ab3','Bb3','Ab3','G3','G3','Ab3','G3','Ab3','Bb3','Bb3','Bb3','Ab3','Bb3','Bb3','G3','Ab3','Bb3','Ab3','G3','G3','Ab3','G3','Ab3','Bb3','Ab3','G3','Ab3','Bb3','Bb3','G3'],
+bass:['Eb3','Eb3','Eb3','C3','Eb3','Eb3','Ab2','Eb3','C3','Eb3','Bb2','Eb3','Ab2','Eb3','Bb2','Eb3','Eb3','Eb3','C3','Eb3','Eb3','Ab2','Eb3','C3','Eb3','C3','Eb3','Ab2','Eb3','Bb2','Eb3']}}
 };
 const CUSTOM_HYMNS = JSON.parse(localStorage.getItem('customHymns') || '{}');
 const INSTRUMENTS={piano:{name:'Piano',icon:'🎹',type:'triangle',attack:.02},guitar:{name:'Guitar',icon:'🎸',type:'sawtooth',attack:.01},organ:{name:'Organ',icon:'⛪',type:'sine',attack:.1},strings:{name:'Strings',icon:'🎻',type:'sawtooth',attack:.15},flute:{name:'Flute',icon:'🪈',type:'sine',attack:.08},bell:{name:'Bell',icon:'🔔',type:'sine',attack:.001}};
@@ -249,9 +256,14 @@ const noteToFreq=(n,t=0)=>{const m={'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':
 const transposeNote=(n,s)=>{if(s===0)return n;const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];const m={'C':0,'C#':1,'Db':1,'D':2,'D#':3,'Eb':3,'E':4,'F':5,'F#':6,'Gb':6,'G':7,'G#':8,'Ab':8,'A':9,'A#':10,'Bb':10,'B':11};const p=n.match(/^([A-G]#?b?)(\d)$/);if(!p)return n;const t=m[p[1]]+parseInt(p[2])*12+s;return names[((t%12)+12)%12]+Math.floor(t/12)};
 const formatNote=n=>n?n.replace('#','♯').replace('b','♭'):'—';
 
-function playNote(n,d,v=.25){if(playbackMuted)return;if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();const i=INSTRUMENTS[selectedInstrument],o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=i.type;o.frequency.value=noteToFreq(n,keyOffset);const t=audioCtx.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+i.attack);g.gain.exponentialRampToValueAtTime(.01,t+d);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+d)}
+function playNote(n,d,v=.25){if(playbackMuted)return;
+if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)()}
+if(audioCtx.state==='suspended'){audioCtx.resume()}
+const i=INSTRUMENTS[selectedInstrument],o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=i.type;o.frequency.value=noteToFreq(n,keyOffset);const t=audioCtx.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+i.attack);g.gain.exponentialRampToValueAtTime(.01,t+d);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+d)}
 
-function togglePlay(){isPlaying?stopPlaying():startPlaying()}
+function initAudio(){if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)()}if(audioCtx.state==='suspended'){audioCtx.resume()}}
+
+function togglePlay(){initAudio();isPlaying?stopPlaying():startPlaying()}
 function startPlaying(){if(!currentHymn)return;stopPlaying();isPlaying=true;noteIndex=loopMode?loopStart:0;document.getElementById('play-btn').textContent='⏹';document.getElementById('current-note-display').style.display=selectedVoice?'block':'none';const tempo=currentHymn.tempo+tempoOffset,beat=60/tempo;
 function next(){const max=Math.max(...Object.values(currentHymn.parts).map(p=>p.length)),end=loopMode?Math.min(loopEnd+1,max):max;if(noteIndex>=end){if(loopMode){noteIndex=loopStart}else{stopPlaying();return}}
 Object.entries(VOICES).forEach(([v])=>{if(voiceStates[v]==='muted')return;const notes=currentHymn.parts[v];if(noteIndex<notes.length){const solo=Object.values(voiceStates).some(s=>s==='solo');if(!solo||voiceStates[v]==='solo')playNote(notes[noteIndex],beat*.9,v===selectedVoice?.35:.15)}});
@@ -293,7 +305,7 @@ function clearPitchDisplay(){document.getElementById('detected-note').textConten
 let selectedImage = null;
 let selectedFileName = '';
 
-function openScanModal(){document.getElementById('scan-modal').classList.remove('hidden');document.getElementById('api-key').value=localStorage.getItem('anthropicApiKey')||''}
+function openScanModal(){document.getElementById('scan-modal').classList.remove('hidden')}
 function closeScanModal(){document.getElementById('scan-modal').classList.add('hidden');selectedImage=null;selectedFileName='';document.getElementById('preview-image').classList.add('hidden');document.getElementById('pdf-notice').classList.add('hidden');document.getElementById('scan-btn').disabled=true;document.getElementById('scan-status').classList.add('hidden');document.getElementById('scan-status').style.color='#a1a1aa'}
 
 async function handleFileSelect(e){
@@ -325,7 +337,7 @@ if(file.type==='application/pdf'){
     document.getElementById('preview-image').src=selectedImage;
     document.getElementById('preview-image').classList.remove('hidden');
     document.getElementById('pdf-notice').textContent='📄 PDF converted: '+file.name+' (page 1)';
-    document.getElementById('scan-btn').disabled=!document.getElementById('api-key').value;
+    document.getElementById('scan-btn').disabled=false;
   }catch(err){
     document.getElementById('pdf-notice').textContent='❌ Error reading PDF: '+err.message;
     document.getElementById('pdf-notice').style.color='#f87171';
@@ -338,48 +350,65 @@ if(file.type==='application/pdf'){
     selectedImage=ev.target.result;
     document.getElementById('preview-image').src=selectedImage;
     document.getElementById('preview-image').classList.remove('hidden');
-    document.getElementById('scan-btn').disabled=!document.getElementById('api-key').value
+    document.getElementById('scan-btn').disabled=false;
   };
   reader.readAsDataURL(file);
 }
 }
-function saveApiKey(){localStorage.setItem('anthropicApiKey',document.getElementById('api-key').value);document.getElementById('scan-btn').disabled=!selectedImage||!document.getElementById('api-key').value}
 
-async function scanHymn(){const apiKey=document.getElementById('api-key').value;if(!apiKey||!selectedImage)return;
-const status=document.getElementById('scan-status');status.classList.remove('hidden');status.textContent='Analyzing sheet music...';document.getElementById('scan-btn').disabled=true;
-try{const base64=selectedImage.split(',')[1];const mediaType=selectedImage.split(';')[0].split(':')[1];
-const response=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:4096,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mediaType,data:base64}},{type:'text',text:`Analyze this hymn sheet music and extract the notes for each voice part (Soprano, Alto, Tenor, Bass).
+async function scanHymn(){
+if(!selectedImage)return;
 
-Return ONLY valid JSON in this exact format, no other text:
-{
-  "title": "Hymn Title",
-  "author": "Composer/Author if visible",
-  "key": "Key signature (e.g. G Major)",
-  "tempo": 72,
-  "verse": ["First line of lyrics", "Second line"],
-  "parts": {
-    "soprano": ["C4", "D4", "E4"],
-    "alto": ["A3", "B3", "C4"],
-    "tenor": ["E3", "F3", "G3"],
-    "bass": ["C3", "D3", "E3"]
+const status=document.getElementById('scan-status');
+status.classList.remove('hidden');
+status.style.color='#a1a1aa';
+status.textContent='Analyzing sheet music...';
+document.getElementById('scan-btn').disabled=true;
+
+try{
+  const base64=selectedImage.split(',')[1];
+  const mediaType=selectedImage.split(';')[0].split(':')[1];
+  
+  const response=await fetch('/api/scan',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({image:base64,mediaType})
+  });
+
+  if(!response.ok){
+    const err=await response.json();
+    throw new Error(err.error||'API request failed');
   }
+  
+  const data=await response.json();
+  const text=data.content[0].text;
+  
+  // Parse JSON from response
+  let hymnData;
+  try{
+    hymnData=JSON.parse(text.replace(/```json\n?|\n?```/g,'').trim());
+  }catch(e){
+    throw new Error('Could not parse hymn data from response');
+  }
+  
+  // Generate unique ID
+  const id='custom-'+Date.now();
+  hymnData.id=id;
+  
+  // Save to localStorage
+  CUSTOM_HYMNS[id]=hymnData;
+  localStorage.setItem('customHymns',JSON.stringify(CUSTOM_HYMNS));
+  
+  status.textContent='✓ Hymn added successfully!';
+  status.style.color='#4ade80';
+  
+  setTimeout(()=>{closeScanModal();renderHymnList()},1500);
+}catch(e){
+  status.textContent='Error: '+e.message;
+  status.style.color='#f87171';
+  document.getElementById('scan-btn').disabled=false;
 }
-
-Notes should be in format like C4, D#4, Eb4, etc. Include all notes in order.
-If you cannot read a part clearly, make a reasonable guess based on typical hymn harmonies.
-Only return the JSON, nothing else.`}]}]})});
-
-if(!response.ok){const err=await response.json();throw new Error(err.error?.message||'API request failed')}
-const data=await response.json();const text=data.content[0].text;
-// Parse JSON from response
-let hymnData;try{hymnData=JSON.parse(text.replace(/```json\n?|\n?```/g,'').trim())}catch(e){throw new Error('Could not parse hymn data from response')}
-// Generate unique ID
-const id='custom-'+Date.now();hymnData.id=id;
-// Save to localStorage
-CUSTOM_HYMNS[id]=hymnData;localStorage.setItem('customHymns',JSON.stringify(CUSTOM_HYMNS));
-status.textContent='✓ Hymn added successfully!';status.style.color='#4ade80';
-setTimeout(()=>{closeScanModal();renderHymnList()},1500)}
-catch(e){status.textContent='Error: '+e.message;status.style.color='#f87171';document.getElementById('scan-btn').disabled=false}}
+}
 
 function renderHymnList(){const l=document.getElementById('hymn-list');l.innerHTML='';
 // Scan card first
