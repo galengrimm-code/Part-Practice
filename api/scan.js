@@ -58,39 +58,56 @@ export default async function handler(req, res) {
             },
             {
               type: 'text',
-              text: `You are analyzing a hymnal page with 4-part choral music (SATB - Soprano, Alto, Tenor, Bass).
+              text: `You are an expert at reading traditional 4-part hymnal sheet music (SATB format).
 
-This is standard hymnal notation where:
-- The TOP staff (treble clef) contains Soprano (stems up) and Alto (stems down)
-- The BOTTOM staff (bass clef) contains Tenor (stems up) and Bass (stems down)
-- Each vertical alignment of notes is sung together
+HYMNAL LAYOUT:
+- Each system has TWO staves connected by a bracket
+- TOP STAFF (Treble Clef): Contains TWO voices
+  • SOPRANO: Notes with stems pointing UP (or the higher note when stems are shared)
+  • ALTO: Notes with stems pointing DOWN (or the lower note when stems are shared)
+- BOTTOM STAFF (Bass Clef): Contains TWO voices  
+  • TENOR: Notes with stems pointing UP (or the higher note when stems are shared)
+  • BASS: Notes with stems pointing DOWN (or the lower note when stems are shared)
 
-Please extract ALL notes for each voice part, reading left to right through the entire hymn.
+HOW TO READ:
+1. Go measure by measure, left to right
+2. Within each measure, go beat by beat
+3. For each beat, identify all 4 notes vertically aligned
+4. The soprano note is ALWAYS the highest pitch
+5. The bass note is ALWAYS the lowest pitch
+6. Alto is below soprano, tenor is above bass
 
-IMPORTANT: Return ONLY a valid JSON object with no additional text, markdown, or explanation.
+DURATION:
+- Whole note = 4 beats
+- Half note = 2 beats  
+- Quarter note = 1 beat
+- If a note is held for multiple beats, repeat it that many times in the array
+
+IMPORTANT RULES:
+- Count carefully - all 4 parts MUST have the same number of notes
+- Include repeated notes (if soprano holds a half note while alto has two quarters, soprano gets the same note twice)
+- Use scientific pitch notation: C4 = middle C
+- Sharps: F#4, C#4, G#4
+- Flats: Bb3, Eb4, Ab4
+- Natural signs cancel sharps/flats from the key signature for that note
+
+Return ONLY valid JSON, no other text:
 
 {
-  "title": "Title of the hymn",
-  "author": "Composer or source if visible",
-  "key": "Key signature (e.g., G Major, D Major, Eb Major)",
+  "title": "Hymn Title",
+  "author": "Composer if shown",
+  "key": "G Major",
   "tempo": 80,
-  "verse": ["First line of lyrics", "Second line of lyrics"],
+  "verse": ["First line of lyrics", "Second line"],
   "parts": {
-    "soprano": ["D4", "G4", "B4", "A4"],
-    "alto": ["B3", "D4", "G4", "F#4"],
-    "tenor": ["G3", "B3", "D4", "D4"],
-    "bass": ["G2", "G3", "G3", "D3"]
+    "soprano": ["D4", "G4", "B4"],
+    "alto": ["B3", "D4", "G4"],
+    "tenor": ["G3", "B3", "D4"],
+    "bass": ["G2", "G3", "G3"]
   }
 }
 
-Note format rules:
-- Use scientific pitch notation: C4 is middle C
-- Sharps: use # (e.g., F#4, C#4)
-- Flats: use b (e.g., Bb3, Eb4)
-- Include every note in sequence, including repeated notes
-- All four parts should have the same number of notes
-
-Read carefully through each measure and extract every note. Begin your response with { and end with }`
+Begin with { and end with }. No markdown, no explanation.`
             }
           ]
         }]
