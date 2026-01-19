@@ -7,17 +7,14 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  // Handle preflight
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Only allow POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -58,56 +55,62 @@ export default async function handler(req, res) {
             },
             {
               type: 'text',
-              text: `You are an expert at reading traditional 4-part hymnal sheet music (SATB format).
+              text: `You are analyzing a HYMNAL page with 4-part choral music in SATB format.
 
-HYMNAL LAYOUT:
-- Each system has TWO staves connected by a bracket
-- TOP STAFF (Treble Clef): Contains TWO voices
-  • SOPRANO: Notes with stems pointing UP (or the higher note when stems are shared)
-  • ALTO: Notes with stems pointing DOWN (or the lower note when stems are shared)
-- BOTTOM STAFF (Bass Clef): Contains TWO voices  
-  • TENOR: Notes with stems pointing UP (or the higher note when stems are shared)
-  • BASS: Notes with stems pointing DOWN (or the lower note when stems are shared)
+STEP 1: IDENTIFY THE STRUCTURE
+- Look for systems (groups of staves connected by a bracket/brace on the left)
+- Each system has TWO staves: treble clef (top) and bass clef (bottom)
+- Count total measures and beats per measure
 
-HOW TO READ:
-1. Go measure by measure, left to right
-2. Within each measure, go beat by beat
-3. For each beat, identify all 4 notes vertically aligned
-4. The soprano note is ALWAYS the highest pitch
-5. The bass note is ALWAYS the lowest pitch
-6. Alto is below soprano, tenor is above bass
+STEP 2: READ THE TREBLE CLEF STAFF (TOP) - LEFT TO RIGHT
+This staff contains TWO voice parts sharing the same staff:
+- SOPRANO: The UPPER notes (stems usually pointing UP, or the higher pitch when notes are stacked)
+- ALTO: The LOWER notes (stems usually pointing DOWN, or the lower pitch when notes are stacked)
 
-DURATION:
-- Whole note = 4 beats
-- Half note = 2 beats  
-- Quarter note = 1 beat
-- If a note is held for multiple beats, repeat it that many times in the array
+Go measure by measure, beat by beat. For each beat, identify:
+- The soprano note (higher one)
+- The alto note (lower one)
 
-IMPORTANT RULES:
-- Count carefully - all 4 parts MUST have the same number of notes
-- Include repeated notes (if soprano holds a half note while alto has two quarters, soprano gets the same note twice)
-- Use scientific pitch notation: C4 = middle C
-- Sharps: F#4, C#4, G#4
-- Flats: Bb3, Eb4, Ab4
-- Natural signs cancel sharps/flats from the key signature for that note
+STEP 3: READ THE BASS CLEF STAFF (BOTTOM) - LEFT TO RIGHT  
+This staff contains TWO voice parts:
+- TENOR: The UPPER notes (stems usually pointing UP, or the higher pitch when notes are stacked)
+- BASS: The LOWER notes (stems usually pointing DOWN, or the lower pitch when notes are stacked)
 
-Return ONLY valid JSON, no other text:
+Go measure by measure, beat by beat. For each beat, identify:
+- The tenor note (higher one)
+- The bass note (lower one)
 
+CRITICAL RULES:
+1. All four parts MUST have the SAME number of notes
+2. If a note is held (half note, dotted note), repeat it for each beat it covers
+3. Use scientific pitch notation: Middle C = C4
+4. Sharps: F#4, C#4, G#4 (use #)
+5. Flats: Bb3, Eb4, Ab4 (use lowercase b)
+6. Check the key signature for sharps/flats that apply to all notes
+7. Natural signs (♮) cancel the key signature for that note
+
+PITCH REFERENCE:
+- Treble clef: Lines are E4, G4, B4, D5, F5 (bottom to top)
+- Treble clef: Spaces are F4, A4, C5, E5 (bottom to top)
+- Bass clef: Lines are G2, B2, D3, F3, A3 (bottom to top)
+- Bass clef: Spaces are A2, C3, E3, G3 (bottom to top)
+
+Return ONLY this JSON format, no other text:
 {
   "title": "Hymn Title",
-  "author": "Composer if shown",
+  "author": "Composer if visible",
   "key": "G Major",
   "tempo": 80,
   "verse": ["First line of lyrics", "Second line"],
   "parts": {
-    "soprano": ["D4", "G4", "B4"],
-    "alto": ["B3", "D4", "G4"],
-    "tenor": ["G3", "B3", "D4"],
-    "bass": ["G2", "G3", "G3"]
+    "soprano": ["G4", "A4", "B4"],
+    "alto": ["D4", "F#4", "G4"],
+    "tenor": ["B3", "D4", "D4"],
+    "bass": ["G3", "D3", "G3"]
   }
 }
 
-Begin with { and end with }. No markdown, no explanation.`
+Begin with { and end with }. No markdown.`
             }
           ]
         }]
