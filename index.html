@@ -311,10 +311,10 @@ function renderSheetMusic(highlightIdx=-1){
   const bass=currentHymn.parts.bass||[];
   const maxNotes=Math.max(soprano.length,alto.length,tenor.length,bass.length);
   
-  const notesPerSystem=8;
+  const notesPerSystem=6;
   const numSystems=Math.ceil(maxNotes/notesPerSystem);
-  const staveWidth=Math.max(container.parentElement.clientWidth-40,400);
-  const systemHeight=180;
+  const staveWidth=Math.min(container.parentElement.clientWidth-30,360);
+  const systemHeight=160;
   
   const renderer=new Renderer(container,Renderer.Backends.SVG);
   renderer.resize(staveWidth+40,numSystems*systemHeight+20);
@@ -401,16 +401,6 @@ function renderSheetMusic(highlightIdx=-1){
   }
   
   document.getElementById('note-counter').textContent=`Note ${highlightIdx>=0?highlightIdx+1:0} / ${maxNotes}`;
-  
-  // Scroll to current system
-  if(highlightIdx>=0){
-    const currentSystem=Math.floor(highlightIdx/notesPerSystem);
-    const scrollTarget=currentSystem*systemHeight;
-    const containerEl=document.getElementById('sheet-container');
-    if(scrollTarget>containerEl.scrollTop+containerEl.clientHeight-200||scrollTarget<containerEl.scrollTop){
-      containerEl.scrollTop=Math.max(0,scrollTarget-50);
-    }
-  }
 }
 
 function playNote(n,d,v=.25){if(playbackMuted)return;if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();const i=INSTRUMENTS[selectedInstrument],o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=i.type;o.frequency.value=noteToFreq(n,keyOffset);const t=audioCtx.currentTime;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+i.attack);g.gain.exponentialRampToValueAtTime(.01,t+d);o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+d)}
